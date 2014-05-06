@@ -4,13 +4,15 @@
 # if it is the same then exit.
 # if it is different then inform the intermediary.
 
-set -x # print each line
-trap read debug # wait for return on each line
+# set -x # debug - print each line
+# trap read debug # debug - wait for stdin return on each line
+
+intermediary_url="$(cat /usr/share/mulll-dynamic-dns/intermediary_path.txt)"\
+"/intermediary_ip.php"
 
 inform_intermediary()
 {
-	curl -G --data-urlencode "ip=$current_ip" \
-	https://intermediary.com/intermediary_ip.php
+	curl -G --data-urlencode "ip=$current_ip" "$intermediary_url"
 }
 
 # backup the current external ip
@@ -22,21 +24,25 @@ else
 fi
 
 # retrieve the new current external ip
-wget -q -O /tmp/my_external_ip.txt http://ipecho.net/plain
+current_ip=$(wget -q -O- http://ipecho.net/plain)
 
-# retrieve the current server external ip according to the intermediary
-wget -q -O /tmp/intermediary_ip.txt https://intermediary.com/intermediary_ip.php
-intermediary_ip=$(cat /tmp/intermediary_ip.txt)
-
-current_ip="$(cat /tmp/my_external_ip.txt)"
+# if the external ip address has changed
 if [ "$current_ip" != "$previous_ip" ]; then
-	# the external ip address has changed - inform the intermediary
+	# first save the new value
+	echo "$current_ip" > /tmp/my_external_ip.txt
+
+	# then inform the intermediary
 	inform_intermediary
+
 	exit $?
 fi
 
+# retrieve the current server external ip according to the intermediary
+intermediary_ip=$(wget -q -O- "$intermediary_url")
+echo "$intermediary_ip" > /tmp/intermediary_ip.txt
+
 if [ "$current_ip" != "$intermediary_ip" ]; then
-	# the intermediary does not know my ip address - inform it now
+	# the intermediary does not know my correct ip address - inform it now
 	inform_intermediary
 	exit $?
 fi
