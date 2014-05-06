@@ -27,7 +27,7 @@ flavor of linux.
 server setup
 ----------
 
-     sudo apt-get install curl wget
+     sudo apt-get install wget
      cd /usr/share/
      sudo git clone git@github.com:mulllhausen/dynamic-dns.git mulll-dynamic-dns
 
