@@ -24,19 +24,24 @@ this project was developed for debian/ubuntu but could be made to run on any
 flavor of linux.
 
 
-setup
+server setup
 ----------
 
-on both the client, server, and intermediary machines:
-     sudo mkdir /usr/share/mulll-dynamic-dns
-     cd /usr/share/mulll-dynamic-dns
-     sudo git clone git@github.com:mulllhausen/dynamic-dns.git
+     cd /usr/share/
+     sudo git clone git@github.com:mulllhausen/dynamic-dns.git mulll-dynamic-dns
 
-on the server add a line to /etc/crontab:
+add a line to /etc/crontab to run the server.sh script every minute:
 
      */1 * * * * root /usr/share/mulll-dynamic-dns/server.sh
 
-on the client add a line to /etc/crontab:
+
+client setup
+----------
+
+     cd /usr/share/
+     sudo git clone git@github.com:mulllhausen/dynamic-dns.git mulll-dynamic-dns
+
+add a line to /etc/crontab to run the client.sh script every minute:
 
      */1 * * * * root /usr/share/mulll-dynamic-dns/client.sh
 
