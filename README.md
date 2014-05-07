@@ -2,8 +2,9 @@ dynamic-dns
 ===========
 
 these scripts resolve a domain name to a changing ip address without the need
-to pay for a similar service. you will need a web-accessible website to store
-the ip address and act as intermediary.
+to pay for a similar service. you will need a web-accessible website with a
+domain name or fixed ip to store the server's ip address and act as
+intermediary.
 
 an example use-case might be to access ssh on your home-pc while at work. if
 your isp has allocated a static ip to your home network then you will not need
@@ -20,7 +21,7 @@ that you want to connect to)
 relays it to the client upon request
 
 
-this project was developed for debian/ubuntu but could be made to run on any
+this project was developed for debian/ubuntu but can be made to run on any
 flavor of linux.
 
 
@@ -29,7 +30,8 @@ server setup
 
      sudo apt-get install wget
      cd /usr/share/
-     sudo git clone git@github.com:mulllhausen/dynamic-dns.git mulll-dynamic-dns
+     sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
+     mulll-dynamic-dns
 
 add a line to /etc/crontab to run the server.sh script every minute:
 
@@ -40,9 +42,11 @@ intermediary setup
 ----------
 
      cd /usr/share/
-     sudo git clone git@github.com:mulllhausen/dynamic-dns.git mulll-dynamic-dns
+     sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
+     mulll-dynamic-dns
      cd mulll-dynamic-dns
-     # remove everything except the scripts needed on the intermediary server
+
+     # remove everything except intermediary_ip.php:
      sudo rm LICENSE README.md server.sh client.sh
 
 set up your favourite webserver with php, eg for apache:
@@ -63,7 +67,8 @@ client setup
 ----------
 
      cd /usr/share/
-     sudo git clone git@github.com:mulllhausen/dynamic-dns.git mulll-dynamic-dns
+     sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
+     mulll-dynamic-dns
 
 add a line to /etc/crontab to run the client.sh script every minute:
 
