@@ -36,6 +36,9 @@ server setup
      # add a line to /etc/crontab to run the server.sh script every minute:
      */1 * * * * root /usr/share/mulll-dynamic-dns/server.sh
 
+     # edit the wget url host in the server.sh script - change
+     # intermediary.com to the hostname of your intermediary server
+
 
 intermediary setup
 ----------
@@ -43,12 +46,13 @@ intermediary setup
      cd /usr/share/
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns
-     cd mulll-dynamic-dns
+     cd mulll-dynamic-dns/
 
      # remove everything except intermediary_ip.php:
      sudo rm LICENSE README.md server.sh client.sh
 
-set up your favourite webserver with php, eg for apache:
+set up your favourite webserver with php to run the intermediary_ip.php upon
+request, eg for apache:
 
      sudo apt-get install apache2 php5 libapache2-mod-php5
 
