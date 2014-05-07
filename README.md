@@ -28,7 +28,10 @@ flavor of linux.
 server setup
 ----------
 
-     sudo apt-get install git-core wget php5
+     # first install all dependencies:
+     sudo apt-get install git-core wget php5 ntpd
+
+     # then checkout the files into a common directory owned by root:
      cd /usr/share/
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns
@@ -37,27 +40,37 @@ server setup
      */1 * * * * root /usr/share/mulll-dynamic-dns/server.sh
 
      # edit the wget url host in the server.sh script - change
-     # intermediary.com to the hostname of your intermediary server
+     # intermediary.com to the hostname of your intermediary server.
+     # also change the password in the server.sh script to something long and
+     # unguessable.
+
+     # finally, ensure the server time is correct:
+     date
 
 
 intermediary setup
 ----------
 
-     sudo apt-get install git-core
+     # first install all dependencies:
+     sudo apt-get install git-core php5
+
+     # then checkout the files into a common directory owned by root:
      cd /usr/share/
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns
      cd mulll-dynamic-dns/
 
-     # remove everything except intermediary_ip.php:
+     # remove all files except for intermediary_ip.php:
      sudo rm LICENSE README.md server.sh client.sh
 
-set up your favourite webserver with php to run the intermediary_ip.php upon
-request, eg for apache:
+     # edit the password in the intermediary_ip.php file to be the same as the
+     # password you chose for server.sh above.
 
-     sudo apt-get install apache2 php5 libapache2-mod-php5
+     # set up your favourite webserver with php to run the intermediary_ip.php
+     # upon request, eg for apache:
+     sudo apt-get install apache2 libapache2-mod-php5
 
-     # now add the following lines to /etc/apache2/sites-enabled/000-default
+     # now add the following text to /etc/apache2/sites-enabled/000-default
      # between the <virtualhost></virtualhost> tags. use the *:443 virtualhost
      # to avoid man-in-the-middle attacks:
 
@@ -65,6 +78,9 @@ request, eg for apache:
      <directory "/usr/share/mulll-dynamic-dns/">
        allow from all
      </directory>
+
+     # finally, ensure the server time is correct:
+     date
 
 
 client setup
