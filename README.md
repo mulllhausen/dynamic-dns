@@ -49,8 +49,9 @@ set up your favourite webserver with php, eg for apache:
 
      sudo apt-get install apache2 php5 libapache2-mod-php5
 
-now add the following lines to /etc/apache2/sites-enabled/000-default between
-the <virtualhost></virtualhost> tags:
+     now add the following lines to /etc/apache2/sites-enabled/000-default
+     between the <virtualhost></virtualhost> tags. use the *:443 virtualhost to
+     avoid man-in-the-middle attacks:
 
      alias /mulll-dynamic-dns/ "/usr/share/mulll-dynamic-dns/"
      <directory "/usr/share/mulll-dynamic-dns/">
