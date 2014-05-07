@@ -15,10 +15,6 @@ salt=$(date +%s)
 # use the php sha1 function to simply match the intermediary result
 hex_hash=$(echo "<?php echo sha1('$salt$pw'); ?>" | php)
 
-# some versions of openssl prepend the string, "(stdin)= " - strip this off if
-# it exists
-hex_hash=$(echo $hex_hash | sed "s/^.* //")
-
 # make sure to use a https intermediary to avoid man-in-the-middle attacks
 url="https://intermediary.com/mulll-dynamic-dns/intermediary_ip.php?action="\
 "update&salt=$salt&hash=$hex_hash"
