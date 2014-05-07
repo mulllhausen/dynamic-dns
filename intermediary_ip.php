@@ -6,20 +6,14 @@ $salts_file = "/tmp/external_ip_salts.txt";
 $external_ip_file = "/tmp/external_ip_address.txt";
 
 $now = time();
+// change this password otherwise anybody will be able to set your server's ip
+// address. make sure to also change it in files server.sh and client.sh
 $pw = "a long string of random characters $%^$%^(f@S!<>";
-
-//both the 'update' and the 'retrieve' actions must specify the salt and hash
-$salt = $_GET["salt"];
-$hash = $_GET["hash"];
-if(!strlen($salt)) die("no salt specified");
-if(!strlen($hash)) die("no hash specified");
-if(abs($now - $salt) > 10) die("salt ($salt) out of range");
-if(salt_already_used($salt)) die("salt already used");
-if(sha1("$salt$pw") != $hash) die("bad hash");
 
 switch($_GET["action"])
 {
 	case "update":
+		validate_querystring(); //die upon fail
 		$server_ip = trim($_SERVER["REMOTE_ADDR"]);
 		echo $server_ip;
 		if(!preg_match("/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/", $server_ip))
@@ -28,13 +22,31 @@ switch($_GET["action"])
 		}
 		//if we make it here then its safe to save the received data
 		file_put_contents($external_ip_file, $server_ip);
-		update_used_salts($salt);
+		update_used_salts($_GET["salt"]);
 		break;
 	case "retrieve":
+		validate_querystring(); //die upon fail
 		echo file_get_contents($external_ip_file);
 		break;
 }
-
+function validate_querystring()
+{
+	global $now, $pw;
+	if(!isset($_GET["salt"]) || !strlen($_GET["salt"]))
+	{
+		die("no salt specified");
+	}
+	if(!isset($_GET["hash"]) || !strlen($_GET["hash"]))
+	{
+		die("no hash specified");
+	}
+	if(abs($now - $_GET["salt"]) > 10)
+	{
+		die("salt (".$_GET["salt"].") out of range");
+	}
+	if(salt_already_used($_GET["salt"])) die("salt already used");
+	if(sha1($_GET["salt"].$pw) != $_GET["hash"]) die("bad hash");
+}
 function salt_already_used($salt)
 {
 	global $salts_file;
