@@ -8,17 +8,17 @@
 # address
 pw="a long string of random characters $%^$%^(f@S!<>"
 
-# the seed is the current unixtime - the intermediary will only accept each seed
+# the salt is the current unixtime - the intermediary will only accept each salt
 # once
-seed=$(date +%s)
-hex_hash=$(echo -n $seed$pw | openssl sha1 -hmac "key")
+salt=$(date +%s)
+hex_hash=$(echo -n "$salt$pw" | openssl sha1 -hmac "key")
 
 # some versions of openssl prepend the string, "(stdin)= " - strip this off if
 # it exists
 hex_hash=$(echo $hex_hash | sed "s/^.* //")
 
 # make sure to use a https intermediary to avoid man-in-the-middle attacks
-wget -q -O- "https://intermediary.com/intermediary_ip.php?action=update&seed="\
-"$seed&hash=$hex_hash"
+wget -q -O- "https://intermediary.com/intermediary_ip.php?action=update&salt="\
+"$salt&hash=$hex_hash"
 
 exit $?
