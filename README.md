@@ -29,7 +29,7 @@ server setup
 ----------
 
      # first install all dependencies:
-     sudo apt-get install git-core wget php5 ntpd
+     sudo apt-get install git-core wget php5 ntp
 
      # then checkout the files into a common directory owned by root:
      cd /usr/share/
@@ -52,7 +52,7 @@ intermediary setup
 ----------
 
      # first install all dependencies:
-     sudo apt-get install git-core php5
+     sudo apt-get install git-core php5 ntp
 
      # then checkout the files into a common directory owned by root:
      cd /usr/share/
@@ -86,7 +86,7 @@ intermediary setup
 client setup
 ----------
 
-     sudo apt-get install git-core wget php5 bind9
+     sudo apt-get install git-core wget php5 ntp bind9
      cd /usr/share/
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns
