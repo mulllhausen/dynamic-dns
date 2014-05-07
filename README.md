@@ -28,7 +28,7 @@ flavor of linux.
 server setup
 ----------
 
-     sudo apt-get install wget
+     sudo apt-get install wget php5
      cd /usr/share/
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns

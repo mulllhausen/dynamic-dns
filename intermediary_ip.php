@@ -12,11 +12,14 @@ switch($_GET["action"])
 {
 	case "update":
 		$salt = $_GET["salt"];
-		if(abs($now - $salt) > 10) die("salt out of range");
-		if(salt_already_used($salt)) die("salt already used");
 		$hash = $_GET["hash"];
+		if(!strlen($salt)) die("no salt specified");
+		if(!strlen($hash)) die("no hash specified");
+		if(abs($now - $salt) > 10) die("salt ($salt) out of range");
+		if(salt_already_used($salt)) die("salt already used");
 		if(sha1("$salt$pw") != $hash) die("bad hash");
 		$server_ip = trim($_SERVER["REMOTE_ADDR"]);
+		echo "your server ip: $server_ip\n";
 		if(!preg_match("/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/", $server_ip))
 		{
 			die("bad ip address $server_ip");
@@ -45,11 +48,12 @@ function update_used_salts($salt)
 	$new_salts_arr = array($salt); //will be saved to the $salts_file
 	foreach($salts_file_arr as $salt_i)
 	{
+		if(!is_numeric($salt_i)) continue;
 		if($salt_i == $salt) continue; //salt already exists in array
-		if(abs($now - $salt_i) < 10) continue; //this salt is too old
+		if(abs($now - $salt_i) > 10) continue; //this salt is too old
 		$new_salts_arr[] = $salt_i;
 	}
-	file_put_contents(implode("\n", $new_salts_arr)); //overwrite
+	file_put_contents($salts_file, implode("\n", $new_salts_arr)); //overwrite
 }
 
 ?>
