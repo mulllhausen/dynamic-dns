@@ -33,8 +33,7 @@ server setup
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns
 
-add a line to /etc/crontab to run the server.sh script every minute:
-
+     # add a line to /etc/crontab to run the server.sh script every minute:
      */1 * * * * root /usr/share/mulll-dynamic-dns/server.sh
 
 
@@ -53,9 +52,9 @@ set up your favourite webserver with php, eg for apache:
 
      sudo apt-get install apache2 php5 libapache2-mod-php5
 
-     now add the following lines to /etc/apache2/sites-enabled/000-default
-     between the <virtualhost></virtualhost> tags. use the *:443 virtualhost to
-     avoid man-in-the-middle attacks:
+     # now add the following lines to /etc/apache2/sites-enabled/000-default
+     # between the <virtualhost></virtualhost> tags. use the *:443 virtualhost
+     # to avoid man-in-the-middle attacks:
 
      alias /mulll-dynamic-dns/ "/usr/share/mulll-dynamic-dns/"
      <directory "/usr/share/mulll-dynamic-dns/">
@@ -70,8 +69,7 @@ client setup
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns
 
-add a line to /etc/crontab to run the client.sh script every minute:
-
+     # add a line to /etc/crontab to run the client.sh script every minute:
      */1 * * * * root /usr/share/mulll-dynamic-dns/client.sh
 
 work in progress :P
