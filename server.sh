@@ -18,7 +18,7 @@ hex_hash=$(echo -n "$salt$pw" | openssl sha1 -hmac "key")
 hex_hash=$(echo $hex_hash | sed "s/^.* //")
 
 # make sure to use a https intermediary to avoid man-in-the-middle attacks
-wget -q -O- "https://intermediary.com/intermediary_ip.php?action=update&salt="\
-"$salt&hash=$hex_hash"
+wget -q -O- "https://intermediary.com/mulll-dynamic-dns/intermediary_ip.php?"\
+"action=update&salt=$salt&hash=$hex_hash"
 
 exit $?
