@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# send a http request to the intermediary (with a hmac in the query-string) to
-# inform the intermediary of this server's ip address
+# send a http request to the intermediary (with a hmac in the query string) to
+# get the server's ip address. then update the local dns.
 
 # change this password otherwise anybody will be able to set your server's ip
-# address. make sure to also change it in files client.sh and
+# address. make sure to also change it in files server.sh and
 # intermediary_ip.php
 pw='a long string of random characters $%^$%^(f@S!<>'
 
@@ -17,9 +17,9 @@ hex_hash=$(echo "<?php echo sha1('$salt$pw'); ?>" | php)
 
 # make sure to use a https intermediary to avoid man-in-the-middle attacks
 url="https://intermediary.com/mulll-dynamic-dns/intermediary_ip.php?action="\
-"update&salt=$salt&hash=$hex_hash"
+"retrieve&salt=$salt&hash=$hex_hash"
 
 # remove the -q flag and run this script manually (./server.sh) to debug
-wget -qO /tmp/mulll-dynamic-dns.log "$url"
+server_ip=$(wget -qO /tmp/mulll-dynamic-dns.log "$url")
 
-exit $?
+#

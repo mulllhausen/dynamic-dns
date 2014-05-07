@@ -28,7 +28,7 @@ flavor of linux.
 server setup
 ----------
 
-     sudo apt-get install wget php5
+     sudo apt-get install git-core wget php5
      cd /usr/share/
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns
@@ -43,6 +43,7 @@ server setup
 intermediary setup
 ----------
 
+     sudo apt-get install git-core
      cd /usr/share/
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns
@@ -69,6 +70,7 @@ request, eg for apache:
 client setup
 ----------
 
+     sudo apt-get install git-core wget php5 bind9
      cd /usr/share/
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns

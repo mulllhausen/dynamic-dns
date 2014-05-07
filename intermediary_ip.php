@@ -8,18 +8,20 @@ $external_ip_file = "/tmp/external_ip_address.txt";
 $now = time();
 $pw = "a long string of random characters $%^$%^(f@S!<>";
 
+//both the 'update' and the 'retrieve' actions must specify the salt and hash
+$salt = $_GET["salt"];
+$hash = $_GET["hash"];
+if(!strlen($salt)) die("no salt specified");
+if(!strlen($hash)) die("no hash specified");
+if(abs($now - $salt) > 10) die("salt ($salt) out of range");
+if(salt_already_used($salt)) die("salt already used");
+if(sha1("$salt$pw") != $hash) die("bad hash");
+
 switch($_GET["action"])
 {
 	case "update":
-		$salt = $_GET["salt"];
-		$hash = $_GET["hash"];
-		if(!strlen($salt)) die("no salt specified");
-		if(!strlen($hash)) die("no hash specified");
-		if(abs($now - $salt) > 10) die("salt ($salt) out of range");
-		if(salt_already_used($salt)) die("salt already used");
-		if(sha1("$salt$pw") != $hash) die("bad hash");
 		$server_ip = trim($_SERVER["REMOTE_ADDR"]);
-		echo "your server ip: $server_ip\n";
+		echo $server_ip;
 		if(!preg_match("/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/", $server_ip))
 		{
 			die("bad ip address $server_ip");
