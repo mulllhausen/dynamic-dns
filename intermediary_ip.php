@@ -1,40 +1,55 @@
 <?php
 
-//receive the server's external ip address and store it in a file to be replayed
-//later
+//receive the server's hmac and external ip address
 
-$ip = trim($_GET["ip"]);
-if($ip)
+$salts_file = "/tmp/external_ip_salts.txt";
+$external_ip_file = "/tmp/external_ip_address.txt";
+
+$now = time();
+$pw = "a long string of random characters $%^$%^(f@S!<>";
+
+switch($_GET["action"])
 {
-	//the user is attempting to update the ip address
-
-	//sanitize ip address
-	if(!preg_match("/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/", $ip))
-	{
-		$now = date("Y-m-d h:i:s");
-		file_put_contents
-		(
-			"/tmp/intermediary_ip.log",
-			"[$now] bad ip address received: $ip", FILE_APPEND
-		);
-		exit;
-	}
-	//ip address is safe - save it for later
-	$previous_ip = file_get_contents("/tmp/intermediary_ip.txt");
-	if($previous_ip != $ip)
-	{
-		file_put_contents
-		(
-			"/tmp/intermediary_ip.log",	"[$now] updated ip address: $ip",
-			FILE_APPEND
-		);
-		file_put_contents("/tmp/intermediary_ip.txt", $ip); //overwrite
-	}
+	case "update":
+		$salt = $_GET["salt"];
+		if(abs($now - $salt) > 10) die("salt out of range");
+		if(salt_already_used($salt)) die("salt already used");
+		$hash = $_GET["hash"];
+		if(sha1("$salt$pw") != $hash) die("bad hash");
+		$server_ip = trim($_SERVER["REMOTE_ADDR"]);
+		if(!preg_match("/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/", $server_ip))
+		{
+			die("bad ip address $server_ip");
+		}
+		//if we make it here then its safe to save the received data
+		file_put_contents($external_ip_file, $server_ip);
+		update_used_salts($salt);
+		break;
+	case "retrieve":
+		echo file_get_contents($external_ip_file);
+		break;
 }
-if(isset($_GET["retrieve"]))
+
+function salt_already_used($salt)
 {
-	if(!strlen($ip)) $ip = file_get_contents("/tmp/intermediary_ip.txt");
-	echo $ip;
+	global $salts_file;
+	$used_salts_str = file_get_contents($salts_file);
+	if(strstr($user_salts_str, $salt)) return true; //found
+	return false; //not found
+}
+function update_used_salts($salt)
+{
+	global $salts_file, $now;
+	$salts_file_str = file_get_contents($salts_file);
+	$salts_file_arr = explode("\n", $salts_file_str);
+	$new_salts_arr = array($salt); //will be saved to the $salts_file
+	foreach($salts_file_arr as $salt_i)
+	{
+		if($salt_i == $salt) continue; //salt already exists in array
+		if(abs($now - $salt_i) < 10) continue; //this salt is too old
+		$new_salts_arr[] = $salt_i;
+	}
+	file_put_contents(implode("\n", $new_salts_arr)); //overwrite
 }
 
 ?>
