@@ -18,7 +18,7 @@ salt=$(date +%s)
 hex_hash=$(echo "<?php echo sha1('$salt$pw'); ?>" | php)
 
 # make sure to use a https intermediary to avoid man-in-the-middle attacks
-url="https://intermediate.com/mulll-dynamic-dns/intermediary_ip.php?action="\
+url="https://intermediary.com/mulll-dynamic-dns/intermediary_ip.php?action="\
 "retrieve&salt=$salt&hash=$hex_hash"
 
 # remove the -q flag and run this script manually (./client) to debug
