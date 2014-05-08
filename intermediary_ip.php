@@ -42,7 +42,7 @@ function validate_querystring()
 	{
 		die("no hash specified");
 	}
-	if(abs($now - $_GET["salt"]) > 10)
+	if(abs($now - $_GET["salt"]) > 30)
 	{
 		die("salt (".$_GET["salt"].") out of range");
 	}
@@ -66,7 +66,7 @@ function update_used_salts($salt)
 	{
 		if(!is_numeric($salt_i)) continue;
 		if($salt_i == $salt) continue; //salt already exists in array
-		if(abs($now - $salt_i) > 10) continue; //this salt is too old
+		if(abs($now - $salt_i) > 30) continue; //this salt is too old
 		$new_salts_arr[] = $salt_i;
 	}
 	file_put_contents($salts_file, implode("\n", $new_salts_arr)); //overwrite
