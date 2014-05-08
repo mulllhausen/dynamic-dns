@@ -1,4 +1,4 @@
-dynamic-dns
+dynamic-dns version 1.0
 ===========
 
 these scripts resolve a domain name to a changing ip address without the need
@@ -36,16 +36,18 @@ server setup
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns
 
-     # add a line to /etc/crontab to run the server.sh script every minute:
-     */1 * * * * root /usr/share/mulll-dynamic-dns/server.sh
-
      # edit the wget url host in the server.sh script - change
      # intermediary.com to the hostname of your intermediary server.
+
      # also change the password in the server.sh script to something long and
      # unguessable.
 
-     # finally, ensure the server time is correct:
+     # ensure the server time is correct:
      date
+
+     # finally, add a line to /etc/crontab to run the server.sh script every
+     # minute:
+     * * * * * root /usr/share/mulll-dynamic-dns/server.sh
 
 
 intermediary setup
@@ -86,13 +88,38 @@ intermediary setup
 client setup
 ----------
 
-     sudo apt-get install git-core wget php5 ntp bind9
+warning - the client.sh script will be altering your /etc/hosts file. if the
+script contains bugs then it may mangle or potentially wipe out this file.
+
+     # before anything else, backup your /etc/hosts file:
+     sudo cp /etc/hosts /etc/hosts.backup0001
+
+     # now install all dependencies:
+     sudo apt-get install git-core wget php5 ntp
+
+     # then checkout the files into a common directory owned by root:
      cd /usr/share/
      sudo git clone git://github.com/mulllhausen/dynamic-dns.git \
      mulll-dynamic-dns
 
-     # add a line to /etc/crontab to run the client.sh script every minute:
-     */1 * * * * root /usr/share/mulll-dynamic-dns/client.sh
+     # edit the wget url host in the client.sh script - change
+     # intermediary.com to the hostname of your intermediary server.
 
-work in progress :P
-===========
+     # change the password in the client.sh script to something long and
+     # unguessable.
+
+     # change the server_hostname variable in the client.sh script to be the
+     # name of the server
+
+     # ensure the server time is correct:
+     date
+
+     # finally, add a line to /etc/crontab to run the client.sh script every
+     # minute:
+     * * * * * root /usr/share/mulll-dynamic-dns/client.sh
+
+
+bugs
+----------
+
+no known bugs so far :)

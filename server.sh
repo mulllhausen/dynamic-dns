@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# version 1.0
+
 # send a http request to the intermediary (with a hmac in the query-string) to
 # inform the intermediary of this server's ip address
 
@@ -20,6 +22,6 @@ url="https://intermediary.com/mulll-dynamic-dns/intermediary_ip.php?action="\
 "update&salt=$salt&hash=$hex_hash"
 
 # remove the -q flag and run this script manually (./server.sh) to debug
-wget -qO /tmp/mulll-dynamic-dns.log "$url"
+wget -qO /tmp/mulll-dynamic-dns-server-log "$url"
 
 exit $?

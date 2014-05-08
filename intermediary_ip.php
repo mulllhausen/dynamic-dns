@@ -1,9 +1,11 @@
 <?php
 
+//version 1.0
+
 //receive the server's hmac and external ip address
 
-$salts_file = "/tmp/external_ip_salts.txt";
-$external_ip_file = "/tmp/external_ip_address.txt";
+$salts_file = "/tmp/mulll-dynamic-dns-intermediary-salts";
+$external_ip_file = "/tmp/mulll-dynamic-dns-server-ip-address";
 
 $now = time();
 // change this password otherwise anybody will be able to set your server's ip
