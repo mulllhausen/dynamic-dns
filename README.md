@@ -123,3 +123,12 @@ bugs
 ----------
 
 no known bugs so far :)
+
+
+author
+----------
+
+petermiller1986 [at] gmail.com
+
+copyright (C) 2007 free software foundation, inc. (see LICENSE file in this
+project for details)
